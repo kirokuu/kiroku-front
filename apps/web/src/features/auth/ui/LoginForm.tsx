@@ -1,72 +1,19 @@
 "use client";
 
+import axiosInstance from "@/lib/axios-instance";
 import { useState, useEffect } from "react";
+import { useLogin } from "../hooks/use-login";
 
 export default function LoginPage() {
-  const [csrfToken, setCsrfToken] = useState<string>("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  // 1. 페이지 로드 시 CSRF 토큰 받아오기
-  useEffect(() => {
-    fetchCsrfToken();
-  }, []);
+  const { login, isLoading, isError, error } = useLogin();
 
-  const fetchCsrfToken = async () => {
-    try {
-      const response = await fetch("/api/auth/csrf");
-      const data = await response.json();
-
-      if (data.statue === "success") {
-        // 오타 수정 필요: status
-        setCsrfToken(data.data.csrfToken);
-        console.log("✅ CSRF 토큰 받아옴:", data.data.csrfToken);
-      }
-    } catch (error) {
-      console.error("❌ CSRF 토큰 요청 실패:", error);
-    }
-  };
-
-  // 2. 로그인 제출 시 CSRF 토큰 포함
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!csrfToken) {
-      alert("CSRF 토큰이 없습니다. 페이지를 새로고침해주세요.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          csrfToken, // ← 여기서 토큰 포함!
-        }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        console.log("✅ 로그인 성공:", result);
-        // 로그인 성공 처리 (리다이렉트 등)
-      } else {
-        console.error("❌ 로그인 실패:", result);
-        alert(result.message || "로그인에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("❌ 로그인 요청 오류:", error);
-      alert("네트워크 오류가 발생했습니다.");
-    } finally {
-      setLoading(false);
-    }
+    login({ email, password });
   };
 
   return (
@@ -86,7 +33,7 @@ export default function LoginPage() {
             <input
               id="email"
               name="email"
-              type="email"
+              type="text"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -114,19 +61,12 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              disabled={loading || !csrfToken}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              disabled={isLoading}
             >
-              {loading ? "로그인 중..." : "로그인"}
+              {isLoading ? "로그인 중..." : "로그인"}
             </button>
           </div>
-
-          {/* 개발용: CSRF 토큰 상태 표시 */}
-          {process.env.NODE_ENV === "development" && (
-            <div className="text-xs text-gray-500">
-              CSRF Token: {csrfToken ? "✅ 로드됨" : "❌ 로딩 중..."}
-            </div>
-          )}
         </form>
       </div>
     </div>
