@@ -1,20 +1,26 @@
 "use client";
 
-import axiosInstance from "@/lib/axios-instance";
-import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../hooks/use-login";
+import { loginSchema, LoginDataForm } from "../lib/schemas";
+import LoginFormFields from "./LoginFormFields";
 import SocialLoginButton from "./SocialLoginButton";
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function LoginForm() {
+  const form = useForm<LoginDataForm>({
+    resolver: zodResolver(loginSchema),
+    mode: "onSubmit",
+    defaultValues: {
+      userId: "",
+      password: "",
+    },
+  });
 
   const { login, isLoading, isError, error } = useLogin();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    login({ username, password });
+  const onSubmit = (data: LoginDataForm) => {
+    login(data);
   };
 
   return (
@@ -26,47 +32,23 @@ export default function LoginPage() {
           </h2>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="email" className="sr-only">
-              이메일
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="text"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="relative block w-full px-3 py-2 border border-gray-300 rounded-md"
-              placeholder="이메일"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="sr-only">
-              비밀번호
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="relative block w-full px-3 py-2 border border-gray-300 rounded-md"
-              placeholder="비밀번호"
-            />
-          </div>
+        <form className="mt-8 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+          <LoginFormFields form={form} />
 
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
               disabled={isLoading}
+              aria-describedby="submit-status"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "로그인 중..." : "로그인"}
             </button>
+            {isLoading && (
+              <span id="submit-status" className="sr-only">
+                로그인 처리 중입니다.
+              </span>
+            )}
           </div>
         </form>
 

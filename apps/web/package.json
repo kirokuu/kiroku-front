@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
     "@tanstack/react-query": "^5.81.5",
     "axios": "^1.10.0",
     "jsonwebtoken": "^9.0.2",
     "next": "13.5.11",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.60.0",
+    "react-hot-toast": "^2.5.2",
+    "zod": "^4.0.2"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
