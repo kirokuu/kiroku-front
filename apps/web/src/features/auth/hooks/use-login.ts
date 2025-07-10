@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios-instance";
 import { useRouter } from "next/navigation";
-
+import { toast } from "react-hot-toast";
 interface LoginData {
-  username: string;
+  userId: string;
   password: string;
 }
 
@@ -37,6 +37,10 @@ export const useLogin = () => {
     },
     onError: (error) => {
       console.log("로그인 실패", error);
+      toast.error(
+        `로그인에 실패했습니다.
+         아이디 또는 비밀번호를 확인해주세요.`
+      );
     },
   });
 

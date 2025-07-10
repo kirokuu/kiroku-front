@@ -1,0 +1,328 @@
+# Kiroku Frontend Cursor Rules
+
+## 프로젝트 정보
+- **상태**: 학습 프로젝트 (Learning Project)
+- **목표**: React/Next.js 생태계 학습 및 코드 품질 향상
+- **Framework**: Next.js 13 (App Router)
+- **Language**: TypeScript
+- **UI**: Tailwind CSS  
+- **State**: React Query (@tanstack/react-query)
+- **Forms**: React Hook Form + Zod
+- **HTTP**: Axios
+- **Architecture**: Feature-Sliced Design (FSD)
+
+## 학습 우선순위 
+
+### 현재 학습 중인 영역
+- React Hook Form + Zod 통합 패턴
+- Feature-Sliced Design 아키텍처 적용
+- TypeScript 고급 타입 활용
+- React Query 상태 관리
+- 컴포넌트 분리 및 재사용성
+
+### 코드 리뷰 관점
+- **학습자 친화적**: 복잡한 패턴보다는 이해하기 쉬운 패턴 우선
+- **점진적 개선**: 한 번에 모든 것을 바꾸기보다는 단계적 개선
+- **설명 포함**: 왜 이렇게 작성했는지 주석이나 설명 포함
+- **대안 제시**: 여러 구현 방법이 있을 때 장단점 설명
+- **Best Practice 우선**: 공식 문서의 권장 패턴 적용
+
+## 핵심 원칙
+
+### 1. 간결성과 전달력 우선
+- **목표**: 상대방이 5초 안에 이해할 수 있는 코드
+- 복잡한 로직은 작은 함수로 분해
+- 변수/함수명은 의도를 명확히 표현
+- 매직 넘버는 상수로 추출
+
+### 2. 토스 코드 품질 기준 준수
+- **가독성**: 코드는 읽기 쉬워야 함
+- **예측가능성**: 함수명으로 동작을 예측할 수 있어야 함  
+- **응집도**: 관련된 코드는 함께 배치
+- **결합도**: 모듈 간 의존성 최소화
+
+### 3. FSD 구조 엄격 준수
+src/
+├── app/ # 애플리케이션 설정, 라우팅
+├── pages/ # 페이지 컴포넌트 (optional with Next.js app router)
+├── widgets/ # 독립적인 UI 블록
+├── features/ # 비즈니스 기능 단위
+├── entities/ # 비즈니스 엔티티
+├── shared/ # 공용 코드
+└── lib/ # 외부 라이브러리 설정
+
+
+
+## 코딩 규칙
+
+### TypeScript
+```typescript
+// ✅ 좋은 예: 명확한 타입 정의
+interface User {
+  id: string;
+  email: string;
+  name: string;
+}
+
+// ✅ 좋은 예: 함수명으로 의도 표현
+function validateUserEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// ❌ 나쁜 예: 모호한 명명
+function check(data: any): boolean {
+  return data.includes("@");
+}
+```
+
+### React 컴포넌트
+```tsx
+// ✅ 좋은 예: 단일 책임 원칙
+interface LoginFormProps {
+  onSubmit: (data: LoginData) => void;
+  isLoading: boolean;
+}
+
+function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onSubmit",
+  });
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {/* 컴포넌트는 UI만 담당 */}
+    </form>
+  );
+}
+
+// ❌ 나쁜 예: 너무 많은 책임
+function LoginPage() {
+  // API 호출, 폼 관리, UI 렌더링을 모두 한 컴포넌트에서 처리
+}
+```
+
+### React Hook Form + Zod
+```typescript
+// ✅ 필수 패턴: 스키마 기반 검증
+const loginSchema = z.object({
+  email: z.string().email("이메일 형식을 확인해주세요"),
+  password: z.string().min(8, "비밀번호는 8자 이상이어야 합니다"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
+// 검증 모드는 용도에 따라 선택
+// - 로그인/간단한 폼: "onSubmit"
+// - 회원가입/복잡한 폼: "onBlur"
+const form = useForm<LoginFormData>({
+  resolver: zodResolver(loginSchema),
+  mode: "onSubmit",
+  defaultValues: {
+    email: "",
+    password: "",
+  },
+});
+
+// ✅ 폼 에러 처리 패턴
+const onSubmit = async (data: LoginFormData) => {
+  try {
+    await login(data);
+  } catch (error) {
+    if (error instanceof ApiError && error.field) {
+      form.setError(error.field, { 
+        type: "server", 
+        message: error.message 
+      });
+    }
+  }
+};
+```
+
+### React Query
+```typescript
+// ✅ 좋은 예: 일관된 네이밍과 에러 처리
+function useUser(id: string) {
+  return useQuery({
+    queryKey: ['user', id],
+    queryFn: () => fetchUser(id),
+    enabled: !!id,
+  });
+}
+
+// ✅ 좋은 예: Mutation 패턴
+function useLoginMutation() {
+  return useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      // 성공 처리
+    },
+    onError: (error) => {
+      // 에러 처리
+    },
+  });
+}
+```
+
+### 컴포넌트 분리 및 조합 패턴
+```tsx
+// ✅ 좋은 예: 컴포넌트 분리
+// 스키마는 별도 파일로
+// features/auth/lib/schemas.ts
+export const loginSchema = z.object({
+  userId: z.string().min(1, "이메일을 입력해주세요.").email("이메일 형식이 올바르지 않습니다."),
+  password: z.string().min(1, "비밀번호를 입력해주세요.").min(8, "비밀번호는 8자 이상이어야 합니다."),
+});
+
+// 필드 컴포넌트 분리
+// features/auth/ui/LoginFormFields.tsx
+function LoginFormFields({ form }: { form: UseFormReturn<LoginFormData> }) {
+  const { register, formState: { errors } } = form;
+  
+  return (
+    <>
+      <div>
+        <input {...register("userId")} type="email" />
+        {errors.userId && <p>{errors.userId.message}</p>}
+      </div>
+      <div>
+        <input {...register("password")} type="password" />
+        {errors.password && <p>{errors.password.message}</p>}
+      </div>
+    </>
+  );
+}
+
+// ✅ 좋은 예: 조합을 통한 재사용
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { data: user, isLoading } = useUser();
+  
+  if (isLoading) return <LoadingSpinner />;
+  if (!user) return <LoginRedirect />;
+  
+  return <>{children}</>;
+}
+
+// 사용
+function ProtectedPage() {
+  return (
+    <AuthGuard>
+      <DashboardContent />
+    </AuthGuard>
+  );
+}
+```
+
+### 접근성 및 사용자 경험
+```tsx
+// ✅ 좋은 예: 접근성 고려
+<input
+  {...register("userId")}
+  aria-invalid={!!errors.userId}
+  aria-describedby={errors.userId ? "userId-error" : undefined}
+  autoComplete="email"
+/>
+{errors.userId && (
+  <p id="userId-error" role="alert" className="text-red-500 text-sm">
+    {errors.userId.message}
+  </p>
+)}
+
+// ✅ 좋은 예: 로딩 상태 표시
+<button
+  type="submit"
+  disabled={isLoading}
+  aria-describedby="submit-status"
+>
+  {isLoading ? "로그인 중..." : "로그인"}
+</button>
+{isLoading && (
+  <span id="submit-status" className="sr-only">
+    로그인 처리 중입니다.
+  </span>
+)}
+```
+
+### 에러 처리
+```typescript
+// ✅ 좋은 예: 명시적 에러 타입
+type ApiError = {
+  message: string;
+  code: string;
+  field?: string;
+};
+
+// ✅ 좋은 예: 에러 바운더리 활용
+function ErrorBoundary({ children }: { children: React.ReactNode }) {
+  // 에러 처리 로직
+}
+```
+
+## 학습 가이드라인
+
+### 새로운 패턴 도입 시
+- 간단한 예제부터 시작
+- 공식 문서의 Best Practice 우선 적용
+- 복잡한 로직은 작은 단위로 분해하여 이해
+- 에러가 발생했을 때 학습 기회로 활용
+
+### 코드 개선 우선순위
+1. **기본기 완성**: 현재 코드를 컴포넌트 분리로 리팩토링
+2. **검증 심화**: 조건부 검증, 비동기 검증 학습
+3. **상태 관리**: React Query와 폼 상태 연동
+4. **사용자 경험**: 로딩 상태, 에러 상태 UI 개선
+5. **접근성**: ARIA, 키보드 네비게이션 개선
+
+### 고급 학습 주제
+```typescript
+// 필드 간 의존성 검증
+const schema = z.object({
+  password: z.string().min(8),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "비밀번호가 일치하지 않습니다.",
+  path: ["confirmPassword"],
+});
+
+// 동적 검증 (서버 체크)
+register("email", {
+  validate: async (value) => {
+    const isAvailable = await checkEmailAvailability(value);
+    return isAvailable || "이미 사용 중인 이메일입니다.";
+  }
+});
+
+// 폼 상태 감시
+const password = form.watch("password");
+```
+
+## 금지 사항
+- `any` 타입 사용 금지 (불가피한 경우 `unknown` 사용)
+- 인라인 스타일 사용 금지 (Tailwind CSS 사용)
+- 직접적인 DOM 조작 금지
+- useEffect 남용 금지 (상태 동기화는 다른 방법 고려)
+- 매직 넘버/문자열 사용 금지
+- `required` HTML 속성과 Zod 검증 중복 사용 금지
+
+## 파일 구조 예시
+src/features/auth/
+├── api/ # API 호출 로직
+├── hooks/ # 커스텀 훅
+├── ui/ # UI 컴포넌트
+├── lib/ # 유틸리티 함수, 스키마
+└── types/ # 타입 정의
+src/shared/
+├── ui/ # 공통 UI 컴포넌트
+├── lib/ # 공통 유틸리티
+├── hooks/ # 공통 훅
+├── api/ # API 설정
+└── types/ # 공통 타입
+
+## 추가 가이드라인
+- 컴포넌트당 200줄 이하 권장
+- 함수당 20줄 이하 권장  
+- props는 최대 5개까지 권장
+- 깊은 중첩 지양 (3depth 이하)
+- Early return 패턴 적극 활용
+- 컴포넌트명과 파일명 일치
+- 불필요한 `useState` 제거 (React Hook Form 사용 시)
