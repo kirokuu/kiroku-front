@@ -3,9 +3,10 @@
 import axiosInstance from "@/lib/axios-instance";
 import { useState, useEffect } from "react";
 import { useLogin } from "../hooks/use-login";
+import SocialLoginButton from "./SocialLoginButton";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const { login, isLoading, isError, error } = useLogin();
@@ -13,7 +14,7 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    login({ email, password });
+    login({ username, password });
   };
 
   return (
@@ -35,8 +36,8 @@ export default function LoginPage() {
               name="email"
               type="text"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="relative block w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="이메일"
             />
@@ -68,6 +69,13 @@ export default function LoginPage() {
             </button>
           </div>
         </form>
+
+        <div className="space-y-3">
+          <SocialLoginButton provider="google">구글로 로그인</SocialLoginButton>
+          <SocialLoginButton provider="kakao">
+            카카오로 로그인
+          </SocialLoginButton>
+        </div>
       </div>
     </div>
   );
