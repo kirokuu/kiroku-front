@@ -3,7 +3,7 @@ import axiosInstance from "@/lib/axios-instance";
 import { useRouter } from "next/navigation";
 
 interface LoginData {
-  email: string;
+  username: string;
   password: string;
 }
 
