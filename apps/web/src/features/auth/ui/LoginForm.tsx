@@ -17,25 +17,28 @@ export default function LoginForm() {
     },
   });
 
-  const { login, isLoading, isError, error } = useLogin();
+  const { login, isLoading } = useLogin();
 
   const onSubmit = (data: LoginDataForm) => {
     login(data);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+    <main className="min-h-screen flex items-center justify-center bg-gray-50">
+      <section className="max-w-md w-full space-y-8">
+        <header>
+          <h1 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             로그인
-          </h2>
-        </div>
+          </h1>
+        </header>
 
         <form className="mt-8 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <LoginFormFields form={form} />
+          <fieldset className="space-y-3">
+            <legend className="sr-only">로그인 정보 입력</legend>
+            <LoginFormFields form={form} />
+          </fieldset>
 
-          <div>
+          <footer>
             <button
               type="submit"
               disabled={isLoading}
@@ -49,16 +52,16 @@ export default function LoginForm() {
                 로그인 처리 중입니다.
               </span>
             )}
-          </div>
+          </footer>
         </form>
 
-        <div className="space-y-3">
+        <aside className="space-y-3">
           <SocialLoginButton provider="google">구글로 로그인</SocialLoginButton>
           <SocialLoginButton provider="kakao">
             카카오로 로그인
           </SocialLoginButton>
-        </div>
-      </div>
-    </div>
+        </aside>
+      </section>
+    </main>
   );
 }
