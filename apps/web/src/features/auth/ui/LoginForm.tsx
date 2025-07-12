@@ -6,6 +6,7 @@ import { useLogin } from "../hooks/use-login";
 import { loginSchema, LoginDataForm } from "../lib/schemas";
 import LoginFormFields from "./LoginFormFields";
 import SocialLoginButton from "./SocialLoginButton";
+import { Button } from "@kiroku/ui";
 
 export default function LoginForm() {
   const form = useForm<LoginDataForm>({
@@ -39,14 +40,14 @@ export default function LoginForm() {
           </fieldset>
 
           <footer>
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
               aria-describedby="submit-status"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "로그인 중..." : "로그인"}
-            </button>
+            </Button>
             {isLoading && (
               <span id="submit-status" className="sr-only">
                 로그인 처리 중입니다.

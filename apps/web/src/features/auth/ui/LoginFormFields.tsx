@@ -1,55 +1,40 @@
 import { UseFormReturn } from "react-hook-form";
 import { LoginDataForm } from "../lib/schemas";
+import { Input } from "@kiroku/ui";
 
 interface LoginFormFieldsProps {
   form: UseFormReturn<LoginDataForm>;
 }
 
 export default function LoginFormFields({ form }: LoginFormFieldsProps) {
-  const {
-    register,
-    formState: { errors },
-  } = form;
+  const { register } = form;
+  const { errors } = form.formState;
 
   return (
-    <>
-      <div>
-        <label htmlFor="email" className="sr-only">
-          이메일
-        </label>
-        <input
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Input
+          label="이메일"
+          error={errors.userId?.message}
           {...register("userId")}
           id="email"
           type="text"
           required
-          className="relative block w-full px-3 py-2 border border-gray-300 rounded-md"
           placeholder="이메일"
         />
-        {errors.userId && (
-          <p id="email-error" className="text-red-500 text-sm">
-            {errors.userId.message}
-          </p>
-        )}
       </div>
 
-      <div>
-        <label htmlFor="password" className="sr-only">
-          비밀번호
-        </label>
-        <input
+      <div className="space-y-2">
+        <Input
+          label="비밀번호"
+          error={errors.password?.message}
           {...register("password")}
           id="password"
           type="password"
           required
-          className="relative block w-full px-3 py-2 border border-gray-300 rounded-md"
           placeholder="비밀번호"
         />
-        {errors.password && (
-          <p id="password-error" className="text-red-500 text-sm">
-            {errors.password.message}
-          </p>
-        )}
       </div>
-    </>
+    </div>
   );
 }
