@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { Button } from "@kiroku/ui";
 
 type SocialProvider = "google" | "kakao";
 interface SocialLoginButtonProps {
@@ -36,9 +37,10 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
       : "/icons/social-icons/kakao_logo.svg";
 
   return (
-    <button
+    <Button
       onClick={onClick}
       className={`${baseStyle} ${providerStyle} ${className}`}
+      type="button"
     >
       <Image
         src={iconPath}
@@ -48,7 +50,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
         className="object-contain"
       />
       <span>{children || defaultText}</span>
-    </button>
+    </Button>
   );
 };
 
