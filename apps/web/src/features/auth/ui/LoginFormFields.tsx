@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { LoginDataForm } from "../lib/schemas";
+import { LoginDataForm } from "../lib/login-schemas";
 import { Input } from "@kiroku/ui";
 
 interface LoginFormFieldsProps {

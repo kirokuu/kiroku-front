@@ -3,10 +3,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../hooks/use-login";
-import { loginSchema, LoginDataForm } from "../lib/schemas";
+import { loginSchema, LoginDataForm } from "../lib/login-schemas";
 import LoginFormFields from "./LoginFormFields";
 import SocialLoginButton from "./SocialLoginButton";
 import { Button } from "@kiroku/ui";
+import Link from "next/link";
 
 export default function LoginForm() {
   const form = useForm<LoginDataForm>({
@@ -48,6 +49,12 @@ export default function LoginForm() {
             >
               {isLoading ? "로그인 중..." : "로그인"}
             </Button>
+            <Link
+              href="/signup"
+              className="text-sm text-gray-500 hover:text-gray-700"
+            >
+              회원가입
+            </Link>
             {isLoading && (
               <span id="submit-status" className="sr-only">
                 로그인 처리 중입니다.
