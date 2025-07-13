@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@kiroku/ui";
+import { OAUTH_URLS } from "../config/oauth";
 
 type SocialProvider = "google" | "kakao";
 interface SocialLoginButtonProps {
@@ -9,7 +10,6 @@ interface SocialLoginButtonProps {
   className?: string;
   children?: React.ReactNode;
 }
-
 const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   provider,
   onClick,
@@ -38,7 +38,9 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
 
   return (
     <Button
-      onClick={onClick}
+      onClick={() => {
+        window.location.href = OAUTH_URLS[provider];
+      }}
       className={`${baseStyle} ${providerStyle} ${className}`}
       type="button"
     >
