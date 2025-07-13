@@ -11,7 +11,7 @@ export default function SignupFormFields({ form }: SignupFormFieldsProps) {
   const { errors } = form.formState;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-1">
       <div className="space-y-2">
         <Input
           label="이메일"
@@ -44,19 +44,7 @@ export default function SignupFormFields({ form }: SignupFormFieldsProps) {
           id="confirmPassword"
           type="password"
           required
-          placeholder="비밀번호"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Input
-          label="	닉네임"
-          error={errors.name?.message}
-          {...register("name")}
-          id="nickname"
-          type="text"
-          required
-          placeholder="닉네임"
+          placeholder="비밀번호 확인"
         />
       </div>
     </div>

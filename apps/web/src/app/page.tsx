@@ -1,12 +1,8 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button, Separator } from "@kiroku/ui";
-import SocialLoginButton from "@/features/auth/ui/SocialLoginButton";
-import Link from "next/link";
-import Image from "next/image";
-import { Mail } from "lucide-react";
-import { TermsNotice } from "@/shared/ui/TermsNotice";
+import { Button } from "@kiroku/ui";
+import { LoginModal } from "@/features/auth/ui/LoginModal";
 
 export default function HomePage() {
   const [showOptions, setShowOptions] = useState(false);
@@ -59,48 +55,7 @@ export default function HomePage() {
                 transition={{ duration: 0.3 }}
                 className="fixed inset-0 z-20 flex items-center justify-center"
               >
-                <div className="bg-white rounded-2xl p-6 shadow-2xl flex flex-col items-stretch w-[95vw] max-w-lg">
-                  <div className="w-full flex items-center">
-                    <Image
-                      className="w-12 h-12"
-                      src="/icons/logo/logo.png"
-                      alt="Kiroku"
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                  <div className="w-full flex flex-col pl-1.5 text-left">
-                    <h2 className="font-bold text-slate-800 mb-1 text-md">
-                      나의 모든 것을 한 곳에서 관리하세요.
-                    </h2>
-                    <p className="text-slate-400 text-sm mb-4">
-                      Kiroku 계정에 로그인
-                    </p>
-                  </div>
-                  <div className="w-full flex items-center justify-center">
-                    <Image
-                      src="/icons/image/login-cat.png"
-                      alt="Login Cat"
-                      width={150}
-                      height={150}
-                    />
-                  </div>
-                  <SocialLoginButton provider="google" className="mb-2">
-                    Google로 로그인
-                  </SocialLoginButton>
-                  <SocialLoginButton provider="kakao" className="mb-4">
-                    Kakao로 로그인
-                  </SocialLoginButton>
-                  <Separator orientation="horizontal" className="w-full mb-2" />
-                  <Button
-                    variant="link"
-                    className="text-slate-400 hover:text-slate-700 hover:bg-transparent"
-                  >
-                    <Mail className="w-4 h-4 mr-1" />
-                    이메일로 계속하기
-                  </Button>
-                  <TermsNotice />
-                </div>
+                <LoginModal onClose={() => setShowOptions(false)} />
               </motion.div>
             </>
           )}

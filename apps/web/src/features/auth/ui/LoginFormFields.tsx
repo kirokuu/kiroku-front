@@ -6,12 +6,12 @@ interface LoginFormFieldsProps {
   form: UseFormReturn<LoginDataForm>;
 }
 
-export default function LoginFormFields({ form }: LoginFormFieldsProps) {
+export const LoginFormFields = ({ form }: LoginFormFieldsProps) => {
   const { register } = form;
   const { errors } = form.formState;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <div className="space-y-2">
         <Input
           label="이메일"
@@ -37,4 +37,4 @@ export default function LoginFormFields({ form }: LoginFormFieldsProps) {
       </div>
     </div>
   );
-}
+};

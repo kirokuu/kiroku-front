@@ -10,7 +10,7 @@ interface SocialLoginButtonProps {
   className?: string;
   children?: React.ReactNode;
 }
-const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
+export const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   provider,
   onClick,
   className = "",
@@ -55,5 +55,3 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
     </Button>
   );
 };
-
-export default SocialLoginButton;
