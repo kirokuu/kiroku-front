@@ -14,7 +14,6 @@ interface LoginModalProps {
   onClose: () => void;
 }
 
-// 화면 전환을 제어할 상태
 type View = "social" | "emailLogin" | "signup";
 
 export function LoginModal({ onClose }: LoginModalProps) {
@@ -22,10 +21,8 @@ export function LoginModal({ onClose }: LoginModalProps) {
 
   const handleBack = () => {
     if (view === "signup") {
-      // 회원가입 화면에서는 -> 이메일 로그인 화면으로
       setView("emailLogin");
     } else if (view === "emailLogin") {
-      // 이메일 로그인 화면에서는 -> 소셜 로그인 화면으로
       setView("social");
     }
   };
@@ -94,7 +91,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="flex flex-col items-center"
+              className="flex flex-col items-center p-1"
             >
               <Image
                 src="/icons/image/login-cat.png"

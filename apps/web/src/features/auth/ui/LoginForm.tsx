@@ -35,14 +35,15 @@ export const LoginForm = ({
       <section>
         <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
           <LoginFormFields form={form} />
+          <Button
+            type="button"
+            variant="link"
+            onClick={onNavigateToSignup}
+            className="block text-center text-xs text-slate-500 hover:text-slate-700 mt-2 pl-1"
+          >
+            계정이 없으신가요?
+          </Button>
         </form>
-        <Button
-          variant="link"
-          onClick={onNavigateToSignup}
-          className="block text-center text-xs text-slate-500 hover:text-slate-700 mt-2 pl-1"
-        >
-          계정이 없으신가요?
-        </Button>
       </section>
     </main>
   );
