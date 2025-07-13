@@ -16,12 +16,6 @@ import { twMerge } from "tailwind-merge";
  * @param className - Tailwind 등 추가 스타일
  * @param ...props - input의 모든 표준 속성 지원
  */
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  id: string;
-  error?: string;
-}
-
 /**
  * 공통 Input 컴포넌트
  *
