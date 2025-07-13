@@ -1,6 +1,32 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
+/**
+ * 공통 Input 컴포넌트
+ *
+ * - label, error, id 등 접근성/에러처리 지원
+ * - React Hook Form 등과 연동에 최적화
+ * - className으로 스타일 확장 가능
+ *
+ * @example
+ * <Input id="email" label="이메일" placeholder="이메일" error={errors.email?.message} {...register("email")} />
+ *
+ * @param label - 시각적/스크린리더용 라벨(기본은 sr-only)
+ * @param id - input과 label 연결, aria-describedby에도 사용
+ * @param error - 에러 메시지(있으면 aria-invalid, 에러 텍스트 표시)
+ * @param className - Tailwind 등 추가 스타일
+ * @param ...props - input의 모든 표준 속성 지원
+ */
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  id: string;
+  error?: string;
+}
 
+/**
+ * 공통 Input 컴포넌트
+ *
+ * @see InputProps
+ */
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   id: string;
