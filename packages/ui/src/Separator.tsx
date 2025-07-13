@@ -21,7 +21,7 @@ interface SeparatorProps {
   children?: React.ReactNode;
 }
 
-const Separator: React.FC<SeparatorProps> = ({
+export const Separator: React.FC<SeparatorProps> = ({
   orientation = "horizontal",
   className = "",
   children,
@@ -68,5 +68,3 @@ const Separator: React.FC<SeparatorProps> = ({
     </div>
   );
 };
-
-export default Separator;
