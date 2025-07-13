@@ -129,10 +129,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
               transition={{ type: "tween", duration: 0.3 }}
               className="absolute w-full"
             >
-              <LoginForm
-                onNavigateToSignup={() => setView("signup")}
-                onNavigateBack={handleBack}
-              />
+              <LoginForm onNavigateToSignup={() => setView("signup")} />
             </motion.div>
           )}
 

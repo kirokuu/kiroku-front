@@ -9,12 +9,8 @@ import { Button } from "@kiroku/ui";
 
 interface LoginFormProps {
   onNavigateToSignup: () => void;
-  onNavigateBack: () => void;
 }
-export const LoginForm = ({
-  onNavigateToSignup,
-  onNavigateBack,
-}: LoginFormProps) => {
+export const LoginForm = ({ onNavigateToSignup }: LoginFormProps) => {
   const form = useForm<LoginDataForm>({
     resolver: zodResolver(loginSchema),
     mode: "onSubmit",
@@ -35,6 +31,11 @@ export const LoginForm = ({
       <section>
         <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
           <LoginFormFields form={form} />
+          <div className="flex justify-center">
+            <Button type="submit" className="w-full">
+              로그인
+            </Button>
+          </div>
           <Button
             type="button"
             variant="link"

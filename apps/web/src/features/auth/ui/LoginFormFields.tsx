@@ -18,7 +18,6 @@ export const LoginFormFields = ({ form }: LoginFormFieldsProps) => {
           {...register("userId")}
           id="email"
           type="text"
-          required
           placeholder="이메일"
         />
       </div>
@@ -30,7 +29,6 @@ export const LoginFormFields = ({ form }: LoginFormFieldsProps) => {
           {...register("password")}
           id="password"
           type="password"
-          required
           placeholder="비밀번호"
         />
       </div>
