@@ -2,3 +2,11 @@ node_modules
 .turbo/
 .turbo/**
 *-turbo.log.*
+.turbo/cookies/
+.turbo/cookies/**
+*.cookie
+## markdown - steering 문서만 제외
+.kiro/steering/*.md
+
+# 다른 .md 파일들도 제외하려면 아래 주석 해제
+# *.md
